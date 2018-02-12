@@ -1,0 +1,4 @@
+<li *ngFor="let user of users"
+  (click)="onSelect(user)">
+  <span class="badge">{{user.id}}</span> {{user.login}}
+</li>
