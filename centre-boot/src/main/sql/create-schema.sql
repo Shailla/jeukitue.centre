@@ -56,6 +56,28 @@ create table ROLE
 
 
 /*==============================================================*/
+/* Table : EVENT                                              */
+/*==============================================================*/
+create table EVENT
+(
+   	EVT_ID					bigint not null auto_increment,
+	EVT_HORODATAGE       	datetime not null,
+	EVT_TYPE             	varchar(50) not null,
+	primary key (EVT_ID)
+);
+
+create table EVENT_PARAMETER
+(
+	EVT_ID					bigint not null,
+	EVP_TYPE             	varchar(50) not null,
+	EVP_VALUE             	varchar(50),
+	primary key (EVT_ID, EVP_TYPE)
+);
+
+alter table EVENT_PARAMETER add constraint FK_PARAMETER_OF_EVENT foreign key (EVT_ID)
+      references EVENT (EVT_ID) on delete restrict on update restrict;
+
+/*==============================================================*/
 /* Table : PROFILE                                              */
 /*==============================================================*/
 create table PROFILE

@@ -14,7 +14,7 @@ import jkt.centre.service.JktAuthenticationProvider;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	JktAuthenticationProvider jktAuthenticationProvider;
+	private JktAuthenticationProvider jktAuthenticationProvider;
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {

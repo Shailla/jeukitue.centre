@@ -31,15 +31,15 @@ public class JktAuthenticationProvider implements AuthenticationProvider {
 	static final Logger LOGGER = LoggerFactory.getLogger(JktAuthenticationProvider.class);
 	
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
 	@Override
 	@Transactional
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		String authLogin = authentication.getName();
+		final String authLogin = authentication.getName();
 
 		// Find the user
-		User user = userDao.findByLogin(authLogin);
+		final User user = userDao.findByLogin(authLogin);
 		
 		if(user == null) {
 			throw new UsernameNotFoundException("User not found");
@@ -56,20 +56,20 @@ public class JktAuthenticationProvider implements AuthenticationProvider {
 			throw new AuthenticationCredentialsNotFoundException("Should never happen, this user has no credentitial set in database");
 		}
 		
-		String authPassword = authentication.getCredentials().toString();
+		final String authPassword = authentication.getCredentials().toString();
 		
 		if(!SecurityUtils.checkHashWithSel(authPassword, authLogin, user.getPasswordHash())) {
 			throw new BadCredentialsException("Bad password");
 		}
 		
 		// Collect all user's roles
-		Set<GrantedAuthority> authorities = new HashSet<>();
-		Set<Profile> profiles = user.getProfiles();
+		final Set<GrantedAuthority> authorities = new HashSet<>();
+		final Set<Profile> profiles = user.getProfiles();
 		
-		for(Profile profile : profiles) {
-			Set<Role> roles = profile.getRoles();
+		for(final Profile profile : profiles) {
+			final Set<Role> roles = profile.getRoles();
 			
-			for(Role role : roles) {
+			for(final Role role : roles) {
 				String roleStr = role.getName();
 				authorities.add(new SimpleGrantedAuthority(roleStr));
 			}
@@ -82,5 +82,4 @@ public class JktAuthenticationProvider implements AuthenticationProvider {
 	public boolean supports(Class<?> authentication) {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
-
 }

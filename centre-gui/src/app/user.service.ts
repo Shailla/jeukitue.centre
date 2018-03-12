@@ -14,10 +14,10 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]> {
-  return this.http.get<User[]>(this.usersServiceUrl)
-    .pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<User[]>(this.usersServiceUrl)
+      .pipe(
+        catchError(this.handleError)
+      );
 }
 
   private handleError(error: any): Promise<any> {

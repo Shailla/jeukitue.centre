@@ -1,4 +1,33 @@
-<li *ngFor="let user of users"
-  (click)="onSelect(user)">
-  <span class="badge">{{user.id}}</span> {{user.login}}
-</li>
+<h1>Page de gestion des utilisateurs</h1>
+
+<!-- Liste des utilisateurs -->
+<table>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Login</th>
+			<th>Mail</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let user of users" (click)="onSelect(user)" [class.selected]="user == selectedUser">
+			<td>{{user.id}}</td>
+			<td>{{user.username}}</td>
+			<td>{{user.mail}}</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- Modification d'un utilisateur -->
+<div *ngIf="selectedUser">
+  <h2>{{selectedUser.username}}</h2>
+  <div><span>id: </span>{{selectedUser.id}}</div>
+  <div>
+    <label>Login:
+      <input [(ngModel)]="selectedUser.username" placeholder="login">
+    </label>
+    <label>Mail:
+      <input [(ngModel)]="selectedUser.mail" placeholder="mail">
+    </label>
+  </div>
+</div>

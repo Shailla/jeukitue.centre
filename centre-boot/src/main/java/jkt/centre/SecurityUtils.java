@@ -22,8 +22,8 @@ public class SecurityUtils {
 		return checkHash(sel + "-" + text, hashReference);
 	}
 	
-	public static String hash(String text) {
-		String textWithSel = SEL + text;
+	public static String hash(String textToHash) {
+		String textWithSel = SEL + textToHash;
 		String hashStr = null;
 
 		try {

@@ -5,10 +5,14 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
+// Services
+import { AuthenticationService } from './authentication.service';
 import { UserService } from './user.service';
 
+// Components
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -20,9 +24,10 @@ import { UsersComponent } from './users/users.component';
   ],
   declarations: [
     AppComponent,
-    UsersComponent
+    UsersComponent,
+    LoginComponent
   ],
-  providers: [UserService],
+  providers: [AuthenticationService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

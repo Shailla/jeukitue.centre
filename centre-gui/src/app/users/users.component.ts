@@ -10,6 +10,7 @@ import { UserService } from '../user.service';
 })
 export class UsersComponent implements OnInit {
   users: User[];
+  selectedUser: User;
 
   constructor(private userService: UserService) { }
 
@@ -18,15 +19,11 @@ export class UsersComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.userService.getUsers().subscribe(
-      users => {
-        this.users = users;
-        console.log('Users JSON response : ', this.users);
-      }
-    );
+    this.userService.getUsers().subscribe(users => this.users = users);
   }
 
   onSelect(user: User) {
-    console.log('User selected : ', user.login);
+    console.log('User selected : ', user.username);
+    this.selectedUser = user;
   }
 }
