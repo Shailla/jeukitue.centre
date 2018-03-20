@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="USR_ID")
 	private long id;
 	
@@ -118,8 +118,6 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return String.format(
-				"User[id=%d, login='%s']",
-				id, login);
+		return String.format("User[id=%d, login='%s']", id, login);
 	}
 }

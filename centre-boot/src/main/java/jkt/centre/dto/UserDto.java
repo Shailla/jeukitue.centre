@@ -2,20 +2,21 @@ package jkt.centre.dto;
 
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+
 public class UserDto {
-	private Long id;
+	public static final String LOGIN = "login";
+	public static final String MAIL = "mail";
+	public static final String ENABLED = "enabled";
+	public static final String PROFILES = "profiles";
+	
 	private String login;
+	
+	@Email
 	private String mail;
+	
 	private Boolean enabled;
 	private Set<String> profiles;
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(final Long id) {
-		this.id = id;
-	}
 	
 	public String getLogin() {
 		return login;
@@ -33,11 +34,11 @@ public class UserDto {
 		this.mail = mail;
 	}
 	
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 	
-	public void setEnabled(final boolean enabled) {
+	public void setEnabled(final Boolean enabled) {
 		this.enabled = enabled;
 	}
 	

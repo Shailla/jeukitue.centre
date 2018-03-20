@@ -22,7 +22,7 @@ import jkt.centre.model.Event.EventParameterType;
 @RestController
 public class EventController {
 
-	public static int EVENT_PAGE_SIZE = 100;
+	public static final int PAGE_SIZE_MAXIMUM = 100;
 	
 	@Autowired
 	private EventDao eventDao;
@@ -32,10 +32,14 @@ public class EventController {
 	 * 
 	 * @return http response
 	 */
-	@GetMapping("/admin/event/list/{pageNumber}")
-	public ResponseEntity<List<EventDto>> adminList(@PathVariable int pageNumber) {
+	@GetMapping("/admin/event/{pageSize}/{pageNumber}")
+	public ResponseEntity<?> adminList(@PathVariable int pageSize, @PathVariable int pageNumber) {
+		if(pageSize > PAGE_SIZE_MAXIMUM) {
+			return new ResponseEntity<String>("Page size is limited to " + PAGE_SIZE_MAXIMUM + " elements", HttpStatus.BAD_REQUEST);
+		}
+		
 		final List<EventDto> dtos = new ArrayList<>();
-		final Iterable<Event> events = eventDao.findAll(new PageRequest(pageNumber, EVENT_PAGE_SIZE));
+		final Iterable<Event> events = eventDao.findAll(PageRequest.of(pageNumber, pageSize));
 
 		for(final Event event : events) {
 			final Map<String, String> parameters = new HashMap<>();

@@ -1,6 +1,6 @@
 package jkt.centre.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +39,7 @@ public class Event {
 	}
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="EVT_ID")
 	private long id;
 
@@ -47,7 +47,7 @@ public class Event {
 	private EventType type;
 
 	@Column(name="EVT_HORODATAGE", nullable=false)
-	private LocalDate horodatage;
+	private LocalDateTime horodatage;
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
@@ -76,11 +76,11 @@ public class Event {
 		this.type = type;
 	}
 
-	public LocalDate getHorodatage() {
+	public LocalDateTime getHorodatage() {
 		return horodatage;
 	}
 
-	public void setHorodatage(LocalDate horodatage) {
+	public void setHorodatage(LocalDateTime horodatage) {
 		this.horodatage = horodatage;
 	}
 

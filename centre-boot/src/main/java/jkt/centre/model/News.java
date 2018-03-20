@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class News {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="NEW_ID")
 	private long id;
 	

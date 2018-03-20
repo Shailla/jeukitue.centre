@@ -1,5 +1,6 @@
 package jkt.centre.service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +21,7 @@ public class EventService {
 
 	private void createEvent(final EventType type, final Map<EventParameterType, String> parameters) {
 		final Event event = new Event();
+		event.setHorodatage(LocalDateTime.now());
 		event.setType(type);
 
 		if(parameters != null) {

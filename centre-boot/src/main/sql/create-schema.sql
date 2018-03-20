@@ -16,6 +16,7 @@ drop table if exists USER;
 /*==============================================================*/
 /* Table : DOWNLOAD                                             */
 /*==============================================================*/
+
 create table DOWNLOAD
 (
    DWL_ID               bigint not null auto_increment,
@@ -45,23 +46,12 @@ create table NEWS
 
 
 /*==============================================================*/
-/* Table : ROLE                                                 */
-/*==============================================================*/
-create table ROLE
-(
-   ROL_NAME              varchar(20) not null,
-   ROL_DESCRIPTION       varchar(100) not null,
-   primary key (ROL_NAME)
-);
-
-
-/*==============================================================*/
 /* Table : EVENT                                              */
 /*==============================================================*/
 create table EVENT
 (
    	EVT_ID					bigint not null auto_increment,
-	EVT_HORODATAGE       	datetime not null,
+	EVT_HORODATAGE       	timestamp not null,
 	EVT_TYPE             	varchar(50) not null,
 	primary key (EVT_ID)
 );
@@ -87,18 +77,15 @@ create table PROFILE
    primary key (PRF_NAME)
 );
 
-create table ROLE_OF_PROFILE
+create table ROLE
 (
 	PRF_NAME             varchar(20) not null,   
 	ROL_NAME             varchar(20) not null,
    primary key (PRF_NAME, ROL_NAME)
 );
 
-alter table ROLE_OF_PROFILE add constraint FK_ROLE_OF_PROFILE__PROFILE foreign key (PRF_NAME)
+alter table ROLE add constraint FK_ROLE_OF_PROFILE foreign key (PRF_NAME)
       references PROFILE (PRF_NAME) on delete restrict on update restrict;
-      
-alter table ROLE_OF_PROFILE add constraint FK_ROLE_OF_PROFILE__ROLE foreign key (ROL_NAME)
-      references ROLE (ROL_NAME) on delete restrict on update restrict;
 
       
 /*==============================================================*/

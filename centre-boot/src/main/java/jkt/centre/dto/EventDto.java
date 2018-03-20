@@ -1,20 +1,20 @@
 package jkt.centre.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class EventDto {
-	private LocalDate horodatage;
+	private LocalDateTime horodatage;
 	private String type;
 	private Map<String, String> parameters;
 	
-	public EventDto(final LocalDate horodatage, final String type, final Map<String, String> parameters) {
+	public EventDto(final LocalDateTime horodatage, final String type, final Map<String, String> parameters) {
 		this.horodatage = horodatage;
 		this.type = type;
 		this.parameters = parameters;
 	}
 	
-	public LocalDate getHorodatage() {
+	public LocalDateTime getHorodatage() {
 		return horodatage;
 	}
 	

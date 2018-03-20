@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.engine.jdbc.NonContextualLobCreator;
@@ -16,6 +18,7 @@ import org.hibernate.engine.jdbc.NonContextualLobCreator;
 public class Download {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "DWL_ID")
 	private long id;
 

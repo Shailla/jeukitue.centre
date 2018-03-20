@@ -14,15 +14,52 @@ public class SecurityUtils {
 	static final String SHA256_ALGO = "SHA-256";
 	static final String SEL = "gr12sel-";
 
-	public static String hashWithSel(String text, String sel) {
+	public static boolean checkPasswordComplexity(final String password) {
+		// Vérifie l'absence d'espaces
+		if(password.matches(".*\\s+.*")) {
+			return false;
+		}
+		
+		// Vérification de la taille du mot de passe
+		if(password.length() < 8) {
+			return false;
+		}
+		
+		// Vérifie qu'au moins 3 types de caractères sont présents parmi minuscules, majuscules, chiffres, caractères spéciaux
+		int count = 0;
+		
+		if(password.matches(".*[a-z]+.*")) {	// Présence de minuscules
+			count++;
+		}
+		
+		if(password.matches(".*[A-Z]+.*")) {	// Présence de majuscules
+			count++;
+		}
+		
+		if(password.matches(".*[0-9]+.*")) {	// Présence de chiffres
+			count++;
+		}
+		
+		if((password.replaceAll("[a-zA-Z0-9]", "").length() > 0)) {	// Présence de caractères qui ne sont ni des majuscules, minucules ou chiffres
+			count++;
+		}
+
+		if(count < 3) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static String hashWithSel(final String text, final String sel) {
 		return hash(sel + "-" + text);
 	}
 
-	public static boolean checkHashWithSel(String text, String sel, String hashReference) {
+	public static boolean checkHashWithSel(final String text, final String sel, final String hashReference) {
 		return checkHash(sel + "-" + text, hashReference);
 	}
 	
-	public static String hash(String textToHash) {
+	public static String hash(final String textToHash) {
 		String textWithSel = SEL + textToHash;
 		String hashStr = null;
 
@@ -38,11 +75,11 @@ public class SecurityUtils {
 		return hashStr;
 	}
 
-	public static boolean checkHash(String text, String hashReference) {
+	public static boolean checkHash(final String text, final String hashReference) {
 		return hash(text).equals(hashReference);
 	}
 	
-	public static void main(String argv[]) {
+	public static void main(final String argv[]) {
 		System.out.println(hashWithSel("admin", "admin"));
 		System.out.println(hashWithSel("user", "user"));
 	}

@@ -70,8 +70,7 @@ public class JktAuthenticationProvider implements AuthenticationProvider {
 			final Set<Role> roles = profile.getRoles();
 			
 			for(final Role role : roles) {
-				String roleStr = role.getName();
-				authorities.add(new SimpleGrantedAuthority(roleStr));
+				authorities.add(new SimpleGrantedAuthority(role.name()));
 			}
 		}
 		
