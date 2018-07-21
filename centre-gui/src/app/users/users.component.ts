@@ -22,8 +22,8 @@ export class UsersComponent implements OnInit {
     this.userService.getUsers().subscribe(users => this.users = users);
   }
 
-  onSelect(user: User) {
-    console.log('User selected : ', user.username);
-    this.selectedUser = user;
+  onSelect(userLogin: string) {
+    console.log('User selected : ', userLogin);
+    this.userService.getUser(userLogin).subscribe(user => this.selectedUser = user);
   }
 }

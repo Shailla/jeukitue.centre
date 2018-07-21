@@ -13,7 +13,7 @@ public class SecurityUtils {
 	
 	static final String SHA256_ALGO = "SHA-256";
 	static final String SEL = "gr12sel-";
-
+	
 	public static boolean checkPasswordComplexity(final String password) {
 		// Vérifie l'absence d'espaces
 		if(password.matches(".*\\s+.*")) {

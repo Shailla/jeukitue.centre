@@ -1,6 +1,10 @@
 package jkt.centre.controller.form;
 
-public class UpdatePasswordForm {
+import javax.validation.constraints.NotNull;
+
+public class UserUpdatePasswordForm {
+	
+	@NotNull
 	private String password;
 
 	public String getPassword() {

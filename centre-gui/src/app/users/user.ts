@@ -1,6 +1,5 @@
 export class User {
-  id: number;
-  username: string;
+  login: number;
   mail: string;
   enabled: boolean;
 }

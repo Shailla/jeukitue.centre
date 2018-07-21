@@ -15,12 +15,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jkt.centre.SecurityUtils;
-import jkt.centre.controller.form.UpdatePasswordForm;
+import jkt.centre.controller.form.UserCreateForm;
+import jkt.centre.controller.form.UserUpdateForm;
+import jkt.centre.controller.form.UserUpdatePasswordForm;
 import jkt.centre.dao.ProfileDao;
 import jkt.centre.dao.UserDao;
 import jkt.centre.dto.UserDto;
@@ -82,7 +85,7 @@ public class UserController {
 		final User user = userDao.findByLogin(login);
 
 		if(user == null) {
-			return new ResponseEntity<String>("No user found with this login", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<JktHttpError>(new JktHttpError(Messages.ERROR_METHOD_USER_UNKNWON, ""), HttpStatus.NOT_FOUND);
 		}
 
 		final UserDto dto = new UserDto();
@@ -103,6 +106,77 @@ public class UserController {
 	}
 
 	/**
+	 * Create a user
+	 * Security : admin only can do this
+	 * 
+	 * @param login user identifier
+	 * @param userData new data of the user, null for not-updated data
+	 * @return http response
+	 */
+	@PostMapping("/admin/user/{login}")
+	public ResponseEntity<?> adminCreateUser(final @PathVariable String login, final @Valid @RequestBody UserCreateForm userData, final Errors errors, final Principal principal) {
+		final boolean alreadyExists = userDao.existsByLogin(login);
+
+		if(alreadyExists) {
+			return new ResponseEntity<JktHttpError>(new JktHttpError(Messages.ERROR_METHOD_USER_ALREADY_EXISTS, ""), HttpStatus.CONFLICT);
+		}
+
+		/* *********************************************** */
+		// Validation
+		/* *********************************************** */
+
+		// Profiles
+		final Set<String> newProfiles = userData.getProfiles();
+
+		if(newProfiles != null) {
+			for(final String newProfile : newProfiles) {
+				if(!profileDao.existsById(newProfile)) {
+					errors.rejectValue(UserDto.PROFILES, Messages.VALID_PROFILE_UNKNWON);
+					break;
+				}
+			}
+		}
+
+		if(errors.hasErrors()) {
+			return new ResponseEntity<JktHttpError>(new JktHttpError(Messages.ERROR_METHOD_FORM_VALIDATION, ""), HttpStatus.CONFLICT);
+		}
+
+
+		/* *********************************************** */
+		// Action
+		/* *********************************************** */
+
+		final User user = userDao.save(new User());
+		
+		// Profiles
+		if(newProfiles != null) {
+			for(final String newProfile : newProfiles) {
+				final Optional<Profile> profileEntity = profileDao.findById(newProfile);
+				profileEntity.ifPresent(theProfile -> user.getProfiles().add(theProfile));
+			}
+		}
+
+		// Mail (validated by annotation in UserDto)
+		final String newMail = userData.getMail();
+
+		if(newMail != null) {
+			user.setMail(newMail);
+		}
+
+		// Enabled
+		final Boolean enabled = userData.isEnabled();
+
+		if(enabled != null) {
+			user.setEnabled(enabled);
+		}
+
+		// Trace an history event
+		eventService.adminUpdateUser(principal.getName(), login);
+
+		return new ResponseEntity<String>("User updated", HttpStatus.OK);
+	}
+	
+	/**
 	 * Update an existing user
 	 * Security : admin only can do this
 	 * 
@@ -111,11 +185,11 @@ public class UserController {
 	 * @return http response
 	 */
 	@PutMapping("/admin/user/{login}")
-	public ResponseEntity<String> adminUpdateUser(final @PathVariable String login, final @Valid @RequestBody UserDto userData, final Errors errors, final Principal principal) {
+	public ResponseEntity<?> adminUpdateUser(final @PathVariable String login, final @Valid @RequestBody UserUpdateForm userData, final Errors errors, final Principal principal) {
 		final User user = userDao.findByLogin(login);
 
 		if(user == null) {
-			return new ResponseEntity<String>("No user found with this login", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<JktHttpError>(new JktHttpError("No user found with this login"), HttpStatus.NOT_FOUND);
 		}
 
 
@@ -129,14 +203,14 @@ public class UserController {
 		if(newProfiles != null) {
 			for(final String newProfile : newProfiles) {
 				if(!profileDao.existsById(newProfile)) {
-					errors.rejectValue(UserDto.PROFILES, Messages.MSG_VALID_PROFILE_UNKNWON);
+					errors.rejectValue(UserDto.PROFILES, Messages.VALID_PROFILE_UNKNWON);
 					break;
 				}
 			}
 		}
 
 		if(errors.hasErrors()) {
-			return new ResponseEntity<String>("Errors found in form", HttpStatus.CONFLICT);
+			return new ResponseEntity<JktHttpError>(new JktHttpError("Errors found in form"), HttpStatus.CONFLICT);
 		}
 
 
@@ -171,7 +245,7 @@ public class UserController {
 		// Trace an history event
 		eventService.adminUpdateUser(principal.getName(), login);
 
-		return new ResponseEntity<String>("User updated", HttpStatus.OK);
+		return new ResponseEntity<JktHttpError>(new JktHttpError("User updated"), HttpStatus.OK);
 	}
 
 	/**
@@ -183,11 +257,11 @@ public class UserController {
 	 * @return
 	 */
 	@PutMapping("/admin/user/{login}/password")
-	public ResponseEntity<String> adminUpdatePasswordUser(final @PathVariable String login, final @RequestBody UpdatePasswordForm updatePasswordForm, final Errors errors, final Principal principal) {
+	public ResponseEntity<?> adminUpdatePasswordUser(final @PathVariable String login, final @Valid @RequestBody UserUpdatePasswordForm updatePasswordForm, final Errors errors, final Principal principal) {
 		final User user = userDao.findByLogin(login);
 
 		if(user == null) {
-			return new ResponseEntity<String>("No user found with this login", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<JktHttpError>(new JktHttpError(Messages.ERROR_METHOD_USER_UNKNWON), HttpStatus.NOT_FOUND);
 		}
 
 
@@ -197,12 +271,8 @@ public class UserController {
 
 		final String newPassword = updatePasswordForm.getPassword();
 		
-		if(newPassword == null) {
-			return new ResponseEntity<String>("Missing new password", HttpStatus.PRECONDITION_FAILED);
-		}
-		
 		if(!SecurityUtils.checkPasswordComplexity(newPassword)) {
-			return new ResponseEntity<String>("New password refused (bad format or low complexity)", HttpStatus.PRECONDITION_FAILED);
+			return new ResponseEntity<JktHttpError>(new JktHttpError(Messages.VALID_PASSWORD_NOTCOMPLIANT), HttpStatus.PRECONDITION_FAILED);
 		}
 
 

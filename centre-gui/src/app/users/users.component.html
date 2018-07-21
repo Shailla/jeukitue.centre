@@ -10,24 +10,23 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let user of users" (click)="onSelect(user)" [class.selected]="user == selectedUser">
-			<td>{{user.id}}</td>
-			<td>{{user.username}}</td>
+		<tr *ngFor="let user of users" (click)="onSelect(user.login)" [class.selected]="user == selectedUser">
+			<td>{{user.login}}</td>
 			<td>{{user.mail}}</td>
+			<td>{{user.enabled}}</td>
 		</tr>
 	</tbody>
 </table>
 
 <!-- Modification d'un utilisateur -->
 <div *ngIf="selectedUser">
-  <h2>{{selectedUser.username}}</h2>
-  <div><span>id: </span>{{selectedUser.id}}</div>
+  <h2>{{selectedUser.login}}</h2>
   <div>
-    <label>Login:
-      <input [(ngModel)]="selectedUser.username" placeholder="login">
-    </label>
     <label>Mail:
       <input [(ngModel)]="selectedUser.mail" placeholder="mail">
+    </label>
+    <label>Enabled:
+      <input [(ngModel)]="selectedUser.enabled" placeholder="enabled">
     </label>
   </div>
 </div>
