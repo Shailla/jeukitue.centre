@@ -1,42 +1,47 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import {catchError, map, tap} from 'rxjs/operators';
-
-import {User} from './users/user';
+import 'rxjs/add/operator/finally';
 
 @Injectable()
 export class AuthenticationService {
+    authenticated = false;
 
-  private authServiceBaseUrl = '/auth/';
+    private registerUrl:string = '/auth/register';
+    private loginUrl:string = '/auth/login';
+    private logoutUrl:string = '/auth/logout';
 
-  private authenticated: boolean;
+    constructor(private http: HttpClient) {
+        console.log('CONSTRUCTOR');
+    }
 
-  constructor(private http: HttpClient) {
-  }
+    register(username: string, password: string) {
+        this.http.post(this.registerUrl, {}).subscribe(
+            (response) => console.log(response)
+        );
+    }
 
-  login(username: string, password: string): Observable<any> {
-    //    return this.http.post<any>(this.authServiceBaseUrl + 'login', {username: username, password: password}).pipe(
-    //      catchError(this.handleError)
-    //    );
-    
-    const headers = new HttpHeaders({
-      authorization: 'Basic ' + btoa(username + ':' + password)
-    });
+    login(username: string, password: string, callback) {
+        const headers = new HttpHeaders({
+        authorization: 'Basic ' + btoa(username + ':' + password)
+        });
 
-    return this.http.post(this.authServiceBaseUrl + 'login', {headers: headers}).pipe(
-      catchError(this.handleError)
-    );
-  }
+        this.http.get(this.loginUrl, {headers: headers}).subscribe(
+            response => {
+                if(response['name']) {
+                    this.authenticated = true;
+                }
+                else {
+                    this.authenticated = false;
+                }
 
-  logout() {
-    return this.http.post<any>(this.authServiceBaseUrl + 'logout', {}).pipe(
-      catchError(this.handleError)
-    );
-  }
+                return callback && callback();
+            }
+        );
+    }
 
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
-  }
+    logout() {
+        this.http.post(this.logoutUrl, {}).finally(() => {
+            this.authenticated = false;
+        }).subscribe();
+    }
 }

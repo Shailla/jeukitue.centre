@@ -20,22 +20,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/gui/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-            .formLogin()
-            	.loginProcessingUrl("/auth/login")
-//                .loginPage("/login")
-                .permitAll()
+        	.httpBasic()
+        	.and()
+        	.authorizeRequests()
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")	// API d'administration
+                .antMatchers("/gui/**").permitAll()						// Images et contenus statiques du site
+                .anyRequest().authenticated()							// Tout le reste
                 .and()
             .logout()
             	.logoutUrl("/auth/logout")
                 .permitAll()
-            .and().
-            	csrf()
-            		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+            .and()
+            	.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 
     @Autowired

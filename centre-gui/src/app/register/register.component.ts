@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../authentication.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
+
     username: string;
     password: string;
 
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        this.authenticationService.login(this.username, this.password, () => this.router.navigateByUrl('/home'));
+        this.authenticationService.register(this.username, this.password);
         this.username = '';
         this.password = '';
     }
