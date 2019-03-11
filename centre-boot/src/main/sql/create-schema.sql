@@ -11,6 +11,8 @@ drop table if exists NEWS;
 drop table if exists role;
 drop table if exists PROFILE;
 drop table if exists USER;
+drop table if exists EVENT_PARAMETER;
+drop table if exists EVENT;
 
 
 /*==============================================================*/
