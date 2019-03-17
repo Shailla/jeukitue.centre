@@ -1,0 +1,20 @@
+<div [hidden]="userAuthenticated">
+  <form name="form" (ngSubmit)="login()">
+    <Label>Login:
+		  <input [(ngModel)]="username" name="username" />
+		</Label>
+		<Label>Password:
+		  <input [(ngModel)]="password" name="password" type="password" />
+	  </Label>
+    <div class="form-group">
+      <button class="btn btn-primary">Login</button>
+      <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+    </div>
+	</form>
+  <br />
+</div>
+<div [hidden]="!userAuthenticated">
+    {{userLogin}}
+    <br />
+    <button (click)="logout()" class="btn btn-primary">Logout</button>
+</div>

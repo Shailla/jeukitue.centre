@@ -1,22 +1,36 @@
 <h1>Page de gestion des utilisateurs</h1>
 
 <!-- Liste des utilisateurs -->
-<table>
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Login</th>
-			<th>Mail</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let user of users" (click)="onSelect(user.login)" [class.selected]="user == selectedUser">
-			<td>{{user.login}}</td>
-			<td>{{user.mail}}</td>
-			<td>{{user.enabled}}</td>
-		</tr>
-	</tbody>
-</table>
+<div class="col-md-12">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Login</th>
+                <th>Mail</th>
+                <th>Enabled</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users" (click)="onSelect(user.login)" [class.selected]="user == selectedUser">
+                <td>{{user.login}}</td>
+                <td>{{user.mail}}</td>
+                <td>{{user.enabled}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <button *ngIf="pageNumber > 1" (click)="showPreviousPage()" class="btn btn-primary col-xs-1">Previous</button>
+    </div>
+    <div class="col-md-4">
+        {{pageNumber}} / {{getTotalPage()}}
+    </div>
+    <div class="col-md-4">
+        <button *ngIf="pageNumber < getTotalPage()" (click)="showNextPage()" class="btn btn-primary col-xs-1">Next</button>
+    </div>
+</div>
 
 <!-- Modification d'un utilisateur -->
 <div *ngIf="selectedUser">

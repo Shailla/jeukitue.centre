@@ -12,10 +12,11 @@ import { UserService } from './user.service';
 
 // Components
 import { AppComponent } from './app.component';
-import { UsersComponent } from './users/users.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { AuthComponent } from './auth/auth.component';
 import { RegisterComponent } from './register/register.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { UsersComponent } from './users/users.component';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -37,10 +38,11 @@ export class XhrInterceptor implements HttpInterceptor {
   ],
   declarations: [
     AppComponent,
-    UsersComponent,
-    LoginComponent,
-    HomeComponent,
-    RegisterComponent
+    WelcomeComponent,
+    AuthComponent,
+    RegisterComponent,
+    DashboardComponent,
+    UsersComponent
   ],
   providers: [AuthenticationService, UserService, { provide: HTTP_INTERCEPTORS, useClass: XhrInterceptor, multi: true }],
   bootstrap: [AppComponent]

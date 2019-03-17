@@ -9,6 +9,9 @@ import { UserService } from '../user.service';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
+  pageNumber: number = 1;
+  pageSize: number = 5;
+  total: number;
   users: User[];
   selectedUser: User;
 
@@ -19,7 +22,39 @@ export class UsersComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.userService.getUsers().subscribe(users => this.users = users);
+    if(this.pageNumber < 1) {
+        this.pageNumber = 1;
+    }
+
+    this.userService.getUsers(this.pageNumber-1, this.pageSize).subscribe(res => {
+        this.total = res.total;
+        this.users = res.users;
+    });
+
+    let maxPage = Math.floor(this.total / this.pageSize + 1);
+
+    if(this.pageNumber > maxPage) {
+        this.pageNumber = maxPage;
+    }
+  }
+
+  getTotalPage(): number {
+    return Math.floor(this.total / this.pageSize + 1);
+  }
+
+  showNextPage() {
+    this.pageNumber++;
+    this.getUsers();
+  }
+
+  showPreviousPage() {
+    this.pageNumber--;
+    this.getUsers();
+  }
+
+  showPage(pageNumber: number) {
+    this.pageNumber = pageNumber;
+    this.getUsers();
   }
 
   onSelect(userLogin: string) {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-	@RequestMapping("/auth/login")
+	@RequestMapping("/rest/auth/login")
 	public Principal user(Principal user) {
 		return user;
 	}

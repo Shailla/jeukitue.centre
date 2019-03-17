@@ -20,10 +20,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import jkt.centre.Constants.Role;
 import jkt.centre.SecurityUtils;
 import jkt.centre.dao.UserDao;
 import jkt.centre.model.Profile;
-import jkt.centre.model.Role;
 import jkt.centre.model.User;
 
 @Component

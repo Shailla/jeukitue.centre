@@ -28,7 +28,10 @@ public class Event {
 		AdminUpdateUser,
 		
 		/** User's password updated by an administrator */
-		AdminUpdateUserPassword;
+		AdminUpdateUserPassword,
+		
+		/** A user has registered himself */
+		UserRegistration;
 	}
 
 	public enum EventParameterType {

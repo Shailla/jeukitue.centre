@@ -1,37 +1,44 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import 'rxjs/add/operator/finally';
+import { AppComponent } from './app.component';
 
 @Injectable()
 export class AuthenticationService {
-    authenticated = false;
+    private registerUrl:string = '/rest/public/user/register';
+    private loginUrl:string = '/rest/auth/login';
+    private logoutUrl:string = '/rest/public/auth/logout';
 
-    private registerUrl:string = '/auth/register';
-    private loginUrl:string = '/auth/login';
-    private logoutUrl:string = '/auth/logout';
-
-    constructor(private http: HttpClient) {
+    constructor(private app: AppComponent, private http: HttpClient) {
         console.log('CONSTRUCTOR');
     }
 
-    register(username: string, password: string) {
-        this.http.post(this.registerUrl, {}).subscribe(
+    register(login: string, password: string, mail: string) {
+        let user = {
+            login: login,
+            password: password,
+            mail: mail
+        };
+
+        this.http.post(this.registerUrl, user, {}).subscribe(
             (response) => console.log(response)
         );
     }
 
-    login(username: string, password: string, callback) {
+    login(login: string, password: string, callback) {
         const headers = new HttpHeaders({
-        authorization: 'Basic ' + btoa(username + ':' + password)
+            authorization: 'Basic ' + btoa(login + ':' + password)
         });
 
         this.http.get(this.loginUrl, {headers: headers}).subscribe(
             response => {
                 if(response['name']) {
-                    this.authenticated = true;
+                    this.app.userAuthenticated = true;
+                    this.app.userLogin = login;
                 }
                 else {
-                    this.authenticated = false;
+                    this.app.userAuthenticated = false;
+                    this.app.userLogin = '';
                 }
 
                 return callback && callback();
@@ -41,7 +48,8 @@ export class AuthenticationService {
 
     logout() {
         this.http.post(this.logoutUrl, {}).finally(() => {
-            this.authenticated = false;
+            this.app.userAuthenticated = false;
+            this.app.userLogin = '';
         }).subscribe();
     }
 }

@@ -12,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 
+import jkt.centre.Constants.Role;
+
 @Entity
 public class Profile {
 
@@ -21,6 +23,9 @@ public class Profile {
 	
 	@Column(name="PRF_DESCRIPTION")
 	private String description;
+	
+	@Column(name="PRF_READONLY")
+	private boolean readOnly;
 
 	@ElementCollection
 	@CollectionTable(name="ROLE", joinColumns=@JoinColumn(name="PRF_NAME"))
@@ -42,6 +47,14 @@ public class Profile {
 
 	public void setDescription(final String description) {
 		this.description = description;
+	}
+	
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(final boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 	
 	public Set<Role> getRoles() {

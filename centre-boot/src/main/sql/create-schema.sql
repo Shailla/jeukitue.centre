@@ -76,6 +76,7 @@ create table PROFILE
 (
    PRF_NAME              varchar(20) not null,
    PRF_DESCRIPTION       varchar(100) not null,
+   PRF_READONLY			 bool,
    primary key (PRF_NAME)
 );
 

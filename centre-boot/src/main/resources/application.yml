@@ -4,3 +4,5 @@ spring:
         url: jdbc:mariadb://localhost:3306/centre
         username: centre
         password: centre
+server:
+    port: 8080

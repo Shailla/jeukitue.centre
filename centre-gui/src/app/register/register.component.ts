@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../authentication.service';
 
@@ -12,16 +11,22 @@ export class RegisterComponent implements OnInit {
 
     username: string;
     password: string;
+    passwordConfirmation: string;
+    mail: string;
 
-    constructor(private authenticationService: AuthenticationService, private router: Router) {
+    constructor(private authenticationService: AuthenticationService) {
         this.username = '';
         this.password = '';
+        this.passwordConfirmation = '';
+        this.mail = "";
     }
 
-    login() {
-        this.authenticationService.register(this.username, this.password);
+    register() {
+        this.authenticationService.register(this.username, this.password, this.mail);
         this.username = '';
         this.password = '';
+        this.passwordConfirmation = '';
+        this.mail = '';
     }
 
     ngOnInit() {

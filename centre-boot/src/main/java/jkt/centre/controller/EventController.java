@@ -32,7 +32,7 @@ public class EventController {
 	 * 
 	 * @return http response
 	 */
-	@GetMapping("/admin/event/{pageSize}/{pageNumber}")
+	@GetMapping("/rest/admin/event/{pageSize}/{pageNumber}")
 	public ResponseEntity<?> adminList(@PathVariable int pageSize, @PathVariable int pageNumber) {
 		if(pageSize > PAGE_SIZE_MAXIMUM) {
 			return new ResponseEntity<String>("Page size is limited to " + PAGE_SIZE_MAXIMUM + " elements", HttpStatus.BAD_REQUEST);

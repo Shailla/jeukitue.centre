@@ -14,7 +14,6 @@ public class UserCreateForm {
 	@Email
 	@NotNull
 	private String mail;
-	
 	private Boolean enabled;
 	private String password;
 	private Set<String> profiles;

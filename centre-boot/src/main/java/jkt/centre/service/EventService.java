@@ -48,4 +48,11 @@ public class EventService {
 
 		createEvent(EventType.AdminUpdateUser, parameters);
 	}
+	
+	public void userRegistration(final String login) {
+		final Map<EventParameterType, String> parameters = new HashMap<>();
+		parameters.put(EventParameterType.UserLogin, login);
+
+		createEvent(EventType.UserRegistration, parameters);
+	}
 }

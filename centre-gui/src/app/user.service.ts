@@ -8,13 +8,13 @@ import {User} from './users/user';
 @Injectable()
 export class UserService {
 
-  private userServiceBaseUrl = '/admin/user/';      // Services about users (create, remove, update, change password, ...)
+  private userServiceBaseUrl = '/rest/admin/user/';      // Services about users (create, remove, update, change password, ...)
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
+  getUsers(pageNumber: number, pageSize: number): Observable<any> {
     console.log('coucou 1');
-    return this.http.get<User[]>(this.userServiceBaseUrl)
+    return this.http.get(this.userServiceBaseUrl + pageSize + '/' + pageNumber)
       .pipe(
         catchError(this.handleError)
       );
