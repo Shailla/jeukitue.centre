@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import 'rxjs/add/operator/finally';
-import { AppComponent } from './app.component';
 
 @Injectable()
 export class AuthenticationService {
     private registerUrl:string = '/rest/public/user/register';
     private loginUrl:string = '/rest/auth/login';
     private logoutUrl:string = '/rest/public/auth/logout';
+    userAuthenticated = false;
+    userLogin: string = '';
 
-    constructor(private app: AppComponent, private http: HttpClient) {
+    constructor(private http: HttpClient) {
         console.log('CONSTRUCTOR');
     }
 
@@ -33,12 +34,12 @@ export class AuthenticationService {
         this.http.get(this.loginUrl, {headers: headers}).subscribe(
             response => {
                 if(response['name']) {
-                    this.app.userAuthenticated = true;
-                    this.app.userLogin = login;
+                    this.userAuthenticated = true;
+                    this.userLogin = login;
                 }
                 else {
-                    this.app.userAuthenticated = false;
-                    this.app.userLogin = '';
+                    this.userAuthenticated = false;
+                    this.userLogin = '';
                 }
 
                 return callback && callback();
@@ -48,8 +49,8 @@ export class AuthenticationService {
 
     logout() {
         this.http.post(this.logoutUrl, {}).finally(() => {
-            this.app.userAuthenticated = false;
-            this.app.userLogin = '';
+            this.userAuthenticated = false;
+            this.userLogin = '';
         }).subscribe();
     }
 }

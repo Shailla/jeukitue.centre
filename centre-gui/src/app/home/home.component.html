@@ -1,7 +1,0 @@
-<div [hidden]="authenticated()">
-    <a [routerLink]="['/login']" class="btn btn-link">Login</a>
-    <a [routerLink]="['/register']" class="btn btn-link">Register</a>
-</div>
-<div [hidden]="!authenticated()">
-    <button (click)="logout()" class="btn btn-primary">D�connexion</button>
-</div>

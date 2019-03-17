@@ -13,9 +13,16 @@ export class AuthComponent implements OnInit {
   username: string;
   password: string;
 
+  userAuthenticated = false;
+  userLogin: string;
+
     constructor(private authService: AuthenticationService, private router: Router) {
         this.username = '';
         this.password = '';
+
+        this.authService.login(undefined, undefined, undefined);
+        this.userAuthenticated = this.authService.userAuthenticated;
+        this.userLogin = this.authService.userLogin;
     }
 
   ngOnInit() {
@@ -23,7 +30,10 @@ export class AuthComponent implements OnInit {
 
   login() {
     this.authService.login(this.username, this.password, () => {
-        this.router.navigateByUrl('/dashboard');
+      this.userAuthenticated = this.authService.userAuthenticated;
+      this.userLogin = this.authService.userLogin;
+
+      this.router.navigateByUrl('/dashboard');
     });
 
     this.username = '';
@@ -31,6 +41,9 @@ export class AuthComponent implements OnInit {
   }
 
   logout() {
-      this.authService.logout();
+    this.userAuthenticated = false;
+    this.userLogin = '';
+
+    this.authService.logout();
   }
 }
