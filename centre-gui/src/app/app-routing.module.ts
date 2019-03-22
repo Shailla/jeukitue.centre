@@ -6,11 +6,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
 
 
-const routes: Routes = [
-  { path: '**', component: WelcomeComponent },
+const routes: Routes = [  
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'users', component: UsersComponent }
+  { path: 'users', component: UsersComponent },
+  { path: '**', component: WelcomeComponent }
 ];
 
 @NgModule({

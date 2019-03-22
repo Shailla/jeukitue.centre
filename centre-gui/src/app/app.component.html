@@ -1,1 +1,9 @@
+<div [hidden]="!userAuthenticated" style="text-align:center">
+<a routerLink="/welcome" routerLinkActive="active"><h1>{{title}}</h1></a>
+</div>
+
+<div [hidden]="userAuthenticated" style="text-align:center">
+<a routerLink="/dashboard" routerLinkActive="active"><h1>{{title}}</h1></a>
+</div>
+
 <router-outlet></router-outlet>
